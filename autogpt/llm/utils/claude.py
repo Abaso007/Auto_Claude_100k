@@ -18,7 +18,7 @@ def _sendReq(anthropic, prompt, max_tokens_to_sample):
     print("----------------request----------------")
     print(prompt)
     print("----------------request----------------\n")
-    print("the input words of claude: "+str(len(prompt)))
+    print(f"the input words of claude: {len(prompt)}")
 
     for _ in range(5):
         try:
@@ -41,9 +41,7 @@ def sendReq(question, max_tokens_to_sample: int = MAX_TOKEN_ONCE):
     prompt = f"{question} {anthropic.AI_PROMPT}"
 
     response = _sendReq(anthropic, prompt, max_tokens_to_sample)
-    data = response.completion
-
-    return data
+    return response.completion
 
 def pmt_gpt_to_claude(question):
     question = str(question)[1:-1]

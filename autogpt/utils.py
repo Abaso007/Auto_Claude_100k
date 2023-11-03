@@ -56,8 +56,7 @@ def clean_input(prompt: str = "", talk=False):
 
         # ask for input, default when just pressing Enter is y
         logger.info("Asking user via keyboard...")
-        answer = session.prompt(ANSI(prompt))
-        return answer
+        return session.prompt(ANSI(prompt))
     except KeyboardInterrupt:
         logger.info("You interrupted Auto-GPT")
         logger.info("Quitting...")
@@ -122,7 +121,7 @@ def get_latest_bulletin() -> tuple[str, bool]:
             "data/CURRENT_BULLETIN.md", "r", encoding="utf-8"
         ).read()
     new_bulletin = get_bulletin_from_web()
-    is_new_news = new_bulletin != "" and new_bulletin != current_bulletin
+    is_new_news = new_bulletin not in ["", current_bulletin]
 
     news_header = Fore.YELLOW + "Welcome to Auto-Claude!\n"
     if new_bulletin or current_bulletin:
@@ -162,7 +161,7 @@ def markdown_to_ansi_style(markdown: str):
 
 
 def get_legal_warning() -> str:
-    legal_text = """
+    return """
 ## DISCLAIMER AND INDEMNIFICATION AGREEMENT
 ### PLEASE READ THIS DISCLAIMER AND INDEMNIFICATION AGREEMENT CAREFULLY BEFORE USING THE AUTOGPT SYSTEM. BY USING THE AUTOGPT SYSTEM, YOU AGREE TO BE BOUND BY THIS AGREEMENT.
 
@@ -179,4 +178,3 @@ behalf. You acknowledge that using the System could expose you to potential liab
 ## Indemnification
 By using the System, you agree to indemnify, defend, and hold harmless the Project Parties from and against any and all claims, liabilities, damages, losses, or expenses (including reasonable attorneys' fees and costs) arising out of or in connection with your use of the System, including, without limitation, any actions taken by the System on your behalf, any failure to properly supervise or monitor the System, and any resulting harm or unintended consequences.
             """
-    return legal_text

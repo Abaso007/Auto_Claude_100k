@@ -99,13 +99,6 @@ def create_config(
         # --gpt4only should always use gpt-4, despite user's SMART_LLM_MODEL config
         config.set_fast_llm_model(GPT_4_MODEL)
         config.set_smart_llm_model(GPT_4_MODEL)
-    else:
-        # config.set_fast_llm_model(check_model(config.fast_llm_model, "fast_llm_model"))
-        # config.set_smart_llm_model(
-        #     check_model(config.smart_llm_model, "smart_llm_model")
-        # )
-        pass
-
     if memory_type:
         supported_memory = get_supported_memory_backends()
         chosen = memory_type

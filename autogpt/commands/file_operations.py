@@ -96,9 +96,7 @@ def is_duplicate_operation(
     state = file_operations_state(config.file_logger_path)
     if operation == "delete" and filename not in state:
         return True
-    if operation == "write" and state.get(filename) == checksum:
-        return True
-    return False
+    return operation == "write" and state.get(filename) == checksum
 
 
 def log_operation(
@@ -255,7 +253,7 @@ def replace_in_file(
 
         return f"File {filename} updated successfully."
     except Exception as e:
-        return "Error: " + str(e)
+        return f"Error: {str(e)}"
 
 
 @command(

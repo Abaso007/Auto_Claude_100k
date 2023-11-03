@@ -18,7 +18,7 @@ def agent(config: Config):
     triggering_prompt = "Triggering prompt"
     workspace_directory = "workspace_directory"
 
-    agent = Agent(
+    return Agent(
         ai_name=ai_name,
         memory=memory,
         next_action_count=next_action_count,
@@ -29,7 +29,6 @@ def agent(config: Config):
         triggering_prompt=triggering_prompt,
         workspace_directory=workspace_directory,
     )
-    return agent
 
 
 def test_agent_initialization(agent: Agent):

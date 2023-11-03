@@ -275,8 +275,7 @@ def parse_json(resp):
         "thoughts":json.loads(resp)["properties"]["thoughts"]["properties"],
         "command":json.loads(resp)["properties"]["command"]["properties"]
         }
-        resp = json.dumps(d)
-        return resp
+        return json.dumps(d)
     except:
         pass
 
@@ -285,8 +284,7 @@ def parse_json(resp):
         "thoughts":json.loads(resp)["properties"]["thoughts"]["properties"],
         "command":json.loads(resp)["properties"]["command"]["properties"]
         }
-        resp = json.dumps(d)
-        return resp
+        return json.dumps(d)
     except:
         pass
 

@@ -24,7 +24,7 @@ def agent(config: Config):
     triggering_prompt = "Triggering prompt"
     workspace_directory = "workspace_directory"
 
-    agent = Agent(
+    return Agent(
         ai_name=ai_name,
         memory=memory,
         next_action_count=next_action_count,
@@ -35,16 +35,12 @@ def agent(config: Config):
         triggering_prompt=triggering_prompt,
         workspace_directory=workspace_directory,
     )
-    return agent
 
 
 def test_message_history_batch_summary(mocker, agent):
     config = Config()
     history = MessageHistory(agent)
     model = config.fast_llm_model
-    message_tlength = 0
-    message_count = 0
-
     # Setting the mock output and inputs
     mock_summary_text = "I executed browse_website command for each of the websites returned from Google search, but none of them have any job openings."
     mock_summary = mocker.patch(
@@ -70,13 +66,13 @@ def test_message_history_batch_summary(mocker, agent):
     assistant_reply = '{\n    "thoughts": {\n        "text": "I will use the \'google_search\' command to find more websites with job openings for software engineering manager role.",\n        "reasoning": "Since the previous website did not provide any relevant information, I will use the \'google_search\' command to find more websites with job openings for software engineer role.",\n        "plan": "- Use \'google_search\' command to find more websites with job openings for software engineer role",\n        "criticism": "I need to ensure that I am able to extract the relevant information from each website and job opening.",\n        "speak": "I will now use the \'google_search\' command to find more websites with job openings for software engineer role."\n    },\n    "command": {\n        "name": "google_search",\n        "args": {\n            "query": "software engineer job openings"\n        }\n    }\n}'
     msg = Message("assistant", assistant_reply, "ai_response")
     history.append(msg)
+    message_tlength = 0
     message_tlength += count_string_tokens(str(msg), config.fast_llm_model)
-    message_count += 1
-
+    message_count = 0 + 1
     # mock some websites returned from google search command in the past
     result = "Command google_search returned: ["
     for i in range(50):
-        result += "http://www.job" + str(i) + ".com,"
+        result += f"http://www.job{str(i)}.com,"
     result += "]"
     msg = Message("system", result, "action_result")
     history.append(msg)
@@ -87,6 +83,7 @@ def test_message_history_batch_summary(mocker, agent):
     user_input_msg = Message("user", user_input)
     history.append(user_input_msg)
 
+    user_input = "Determine which next command to use, and respond using the format specified above:'"
     # mock numbers of AI response and action results from browse_website commands in the past, doesn't need the thoughts part, as the summarization code discard them anyway
     for i in range(50):
         assistant_reply = (
@@ -100,16 +97,13 @@ def test_message_history_batch_summary(mocker, agent):
         message_count += 1
 
         result = (
-            "Command browse_website returned: Answer gathered from website: The text in job"
-            + str(i)
-            + " does not provide information on specific job requirements or a job URL.]",
+            f"Command browse_website returned: Answer gathered from website: The text in job{str(i)} does not provide information on specific job requirements or a job URL.]",
         )
         msg = Message("system", result, "action_result")
         history.append(msg)
         message_tlength += count_string_tokens(str(msg), config.fast_llm_model)
         message_count += 1
 
-        user_input = "Determine which next command to use, and respond using the format specified above:'"
         user_input_msg = Message("user", user_input)
         history.append(user_input_msg)
 

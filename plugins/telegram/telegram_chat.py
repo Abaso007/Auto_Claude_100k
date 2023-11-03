@@ -37,10 +37,10 @@ class TelegramUtils:
                     update = self.poll_anyMessage()
                     print("Message received! Getting chat id...")
                     chat_id = update.message.chat.id
-                    print("Your chat id is: " + str(chat_id))
-                    print("And the message is: " + update.message.text)
+                    print(f"Your chat id is: {str(chat_id)}")
+                    print(f"And the message is: {update.message.text}")
                     confirmation = random.randint(1000, 9999)
-                    print("Sending confirmation message: " + str(confirmation))
+                    print(f"Sending confirmation message: {confirmation}")
                     text = f"Hello! Your chat id is: {chat_id} and the confirmation code is: {confirmation}"
                     self.chat_id = chat_id
                     self.send_message(text)  # Send confirmation message
@@ -62,11 +62,7 @@ class TelegramUtils:
     async def poll_anyMessage_async(self):
         bot = Bot(token=self.api_key)
         last_update = await bot.get_updates(timeout=30)
-        if len(last_update) > 0:
-            last_update_id = last_update[-1].update_id
-        else:
-            last_update_id = -1
-
+        last_update_id = last_update[-1].update_id if len(last_update) > 0 else -1
         while True:
             try:
                 print("Waiting for first message...")
@@ -84,7 +80,7 @@ class TelegramUtils:
 
     def handle_response(self, update: Update, context: CallbackContext):
         try:
-            print("Received response: " + update.message.text)
+            print(f"Received response: {update.message.text}")
 
             if self.is_authorized_user(update):
                 response_queue.put(update.message.text)
@@ -227,7 +223,7 @@ class TelegramUtils:
         response_queue = ""
         # await delete_old_messages()
 
-        print("Asking user: " + question)
+        print(f"Asking user: {question}")
         await self._send_message(message=question)
 
         print("Waiting for response on Telegram chat...")
@@ -269,7 +265,7 @@ class TelegramUtils:
         else:
             response_text = response_queue
 
-        print("Response received from Telegram: " + response_text)
+        print(f"Response received from Telegram: {response_text}")
         return response_text
 
     async def _poll_updates(self):
@@ -278,12 +274,8 @@ class TelegramUtils:
         print("getting updates...")
         try:
             last_update = await bot.get_updates(timeout=1)
-            if len(last_update) > 0:
-                last_update_id = last_update[-1].update_id
-            else:
-                last_update_id = -1
-
-            print("last update id: " + str(last_update_id))
+            last_update_id = last_update[-1].update_id if len(last_update) > 0 else -1
+            print(f"last update id: {str(last_update_id)}")
             while True:
                 try:
                     print("Polling updates...")
@@ -304,7 +296,7 @@ class TelegramUtils:
             print("Error while polling updates")
 
     def ask_user(self, prompt):
-        print("Asking user: " + prompt)
+        print(f"Asking user: {prompt}")
         try:
             loop = asyncio.get_running_loop()
         except RuntimeError:  # 'RuntimeError: There is no current event loop...'

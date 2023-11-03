@@ -41,11 +41,10 @@ def read_audio(audio: bytes, agent: Agent) -> str:
         str: The text from the audio
     """
     if agent.config.audio_to_text_provider == "huggingface":
-        text = read_huggingface_audio(audio, agent.config)
-        if text:
+        if text := read_huggingface_audio(audio, agent.config):
             return f"The audio says: {text}"
         else:
-            return f"Error, couldn't convert audio to text"
+            return "Error, couldn't convert audio to text"
 
     return "Error: No audio to text provider given"
 

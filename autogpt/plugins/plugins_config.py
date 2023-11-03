@@ -67,12 +67,10 @@ class PluginsConfig:
     @staticmethod
     def create_empty_plugins_config(global_config: Config):
         """Create an empty plugins_config.yaml file. Fill it with values from old env variables."""
-        base_config = {}
-
-        # Backwards-compatibility shim
-        for plugin_name in global_config.plugins_denylist:
-            base_config[plugin_name] = {"enabled": False, "config": {}}
-
+        base_config = {
+            plugin_name: {"enabled": False, "config": {}}
+            for plugin_name in global_config.plugins_denylist
+        }
         for plugin_name in global_config.plugins_allowlist:
             base_config[plugin_name] = {"enabled": True, "config": {}}
 

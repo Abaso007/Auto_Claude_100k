@@ -252,8 +252,7 @@ def test_replace_in_file_all_occurrences(test_file, test_file_path, agent: Agent
     test_file.write(old_content)
     test_file.close()
     file_ops.replace_in_file(test_file_path, "test", "update", agent=agent)
-    with open(test_file_path) as f:
-        new_content = f.read()
+    new_content = Path(test_file_path).read_text()
     print(new_content)
     print(expected_content)
     assert new_content == expected_content
@@ -267,9 +266,7 @@ def test_replace_in_file_one_occurrence(test_file, test_file_path, agent: Agent)
     file_ops.replace_in_file(
         test_file_path, "test", "update", agent=agent, occurrence_index=1
     )
-    with open(test_file_path) as f:
-        new_content = f.read()
-
+    new_content = Path(test_file_path).read_text()
     assert new_content == expected_content
 
 
@@ -284,9 +281,7 @@ def test_replace_in_file_multiline_old_text(test_file, test_file_path, agent: Ag
         "\nfile. succeeded test\n",
         agent=agent,
     )
-    with open(test_file_path) as f:
-        new_content = f.read()
-
+    new_content = Path(test_file_path).read_text()
     assert new_content == expected_content
 
 
